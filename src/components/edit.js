@@ -3,12 +3,10 @@ import {Link} from "react-router-dom"
 
 const Edit = (props) => {
   const handleEdit = (event) => {
-    console.log(props.selected);
     props.edit(props.selected)
   }
   const handleChange = (event) => {
     event.preventDefault()
-    console.log(event.target.id);
     props.changeHandler(event.target.id,event.target.value)
   }
   return (

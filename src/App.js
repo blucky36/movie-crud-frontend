@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from 'react';
+import React, {Component} from 'react';
 import Header from "./components/header.js"
 import HomePage from "./components/homePage.js"
 import Movies from "./components/movies.js"
@@ -15,15 +15,13 @@ class App extends Component {
   async componentDidMount(){
     let movies = await fetch(`${process.env.REACT_APP_API}`).then(data=>data.json())
     let sorted = await movies.sort((a,b)=>a.id-b.id)
-    this.setState({...this.state,movies:sorted},()=>{console.log(this.state)})
+    this.setState({...this.state,movies:sorted})
   }
 
   async getSpecific(id){
     if(!id) return
     if(this.state.movies.filter(e=>e.id===Number(id)).length === 0)return
     let movie = await fetch(`${process.env.REACT_APP_API}/${id}`).then(data=>data.json())
-    let found = this.state.movies.find(e => e.id === Number(id))
-    let index = this.state.movies.indexOf(found)
     this.setState({...this.state,selected:movie})
   }
 
@@ -55,12 +53,11 @@ class App extends Component {
   }
 
   changeSelected(selected){
-    console.log(selected);
-    this.setState({...this.state,selected},()=>{console.log(this.state);})
+    this.setState({...this.state,selected})
   }
 
   changeHandler(id,val){
-    this.setState({...this.state,selected:{...this.state.selected,[id]:val}},()=>{console.log(this.state.selected)})
+    this.setState({...this.state,selected:{...this.state.selected,[id]:val}})
   }
 
   render() {
@@ -68,16 +65,14 @@ class App extends Component {
       <div className="App">
         <Router>
           <div>
-
-              <Header/>
-              <Switch>
-                <Route exact path = "/" render={()=><HomePage/>}/>
-                <Route exact path = "/movies" render={()=><Movies movies={this.state.movies} editBtn = {this.changeSelected.bind(this)} del = {this.deleteMovie.bind(this)}/>}/>
-                <Route path = "/post" render = {()=><Post post = {this.postMovie.bind(this)}/>}/>
-                <Route path = {`/edit/${this.state.selected.id}`} render={()=><Edit edit={this.updateMovie.bind(this)} changeHandler = {this.changeHandler.bind(this)} selected = {this.state.selected}/>}/>
-                <Route path = {`/movies/${this.state.selected.id}`} render={()=><MoviePage movie = {this.state.selected}/>}/>
-              </Switch>
-
+            <Header/>
+            <Switch>
+              <Route exact path = "/" render={()=><HomePage/>}/>
+              <Route exact path = "/movies" render={()=><Movies movies={this.state.movies} editBtn = {this.changeSelected.bind(this)} del = {this.deleteMovie.bind(this)}/>}/>
+              <Route path = "/post" render = {()=><Post post = {this.postMovie.bind(this)}/>}/>
+              <Route path = {`/edit/${this.state.selected.id}`} render={()=><Edit edit={this.updateMovie.bind(this)} changeHandler = {this.changeHandler.bind(this)} selected = {this.state.selected}/>}/>
+              <Route path = {`/movies/${this.state.selected.id}`} render={()=><MoviePage movie = {this.state.selected}/>}/>
+            </Switch>
           </div>
         </Router>
         <NyanScrollBar draggable targetAxis="vertical" />
